@@ -93,17 +93,6 @@
       <version>7.61.0.Final</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-  <groupId>org.drools</groupId>
-  <artifactId>drools-canonical-model</artifactId>
-  <version>${rhpam.version}</version>
-</dependency>
-
-<dependency>
-  <groupId>org.drools</groupId>
-  <artifactId>drools-model-compiler</artifactId>
-  <version>${rhpam.version}</version>
-</dependency>
   </dependencies>
   <build>
     <plugins>
