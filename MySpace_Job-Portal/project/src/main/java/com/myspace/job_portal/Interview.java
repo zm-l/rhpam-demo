@@ -8,15 +8,20 @@ public class Interview implements java.io.Serializable {
 
 	static final long serialVersionUID = 1L;
 
-	@org.kie.api.definition.type.Label("Interviewer")
+	@org.kie.api.definition.type.Label(value = "Interview Date and Time")
+	private java.time.LocalDateTime interviewDateTime;
+	@org.kie.api.definition.type.Label(value = "Interviewer")
 	private java.lang.String interviewer;
-	@org.kie.api.definition.type.Label("Candidate")
-	private java.lang.String candidate;
-
-	@org.kie.api.definition.type.Label(value = "Date and Time")
-	private java.time.LocalDateTime dateTime;
 
 	public Interview() {
+	}
+
+	public java.time.LocalDateTime getInterviewDateTime() {
+		return this.interviewDateTime;
+	}
+
+	public void setInterviewDateTime(java.time.LocalDateTime interviewDateTime) {
+		this.interviewDateTime = interviewDateTime;
 	}
 
 	public java.lang.String getInterviewer() {
@@ -27,34 +32,15 @@ public class Interview implements java.io.Serializable {
 		this.interviewer = interviewer;
 	}
 
-	public java.lang.String getCandidate() {
-		return this.candidate;
-	}
-
-	public void setCandidate(java.lang.String candidate) {
-		this.candidate = candidate;
-	}
-
-	public java.time.LocalDateTime getDateTime() {
-		return this.dateTime;
-	}
-
-	public void setDateTime(java.time.LocalDateTime dateTime) {
-		this.dateTime = dateTime;
-	}
-
-	public Interview(java.lang.String interviewer, java.lang.String candidate,
-			java.time.LocalDateTime dateTime) {
+	public Interview(java.time.LocalDateTime interviewDateTime,
+			java.lang.String interviewer) {
+		this.interviewDateTime = interviewDateTime;
 		this.interviewer = interviewer;
-		this.candidate = candidate;
-		this.dateTime = dateTime;
 	}
-
-    @Override
-    public String toString() {
-        return "Interviewer: " + interviewer + "\n" +
-            "Candidate: " + candidate + "\n" +
-            "Date and Time: " + dateTime;
-    }
+	
+	@Override
+	public String toString() {
+		return this.interviewDateTime + "\n" + this.interviewer + "\n";
+	}
 
 }

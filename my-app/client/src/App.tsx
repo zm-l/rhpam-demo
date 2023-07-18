@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Register from "./pages/Register";
+import Login, { LoginProps } from "./pages/Login";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Task from "./pages/Task";
+import Apply from "./pages/Apply";
 
-function App() {
+const App: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const loginProps: LoginProps = {
+    username: username,
+    password: password,
+    setUsername: setUsername,
+    setPassword: setPassword,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Routes>
+        <Route path="/" element={<Login {...loginProps} />}></Route>
+        <Route path="/register" element={<Register />}></Route>
+        <Route path="/task" element={<Task />}></Route>
+        <Route path="/apply" element={<Apply />}></Route>
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;

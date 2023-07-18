@@ -1,10 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import { Pool } from "pg";
+import JBPMSecurityManagementRESTAPI from "./JBPMSecurityManagementRESTAPI";
 import bcrypt from "bcrypt";
 import cors from "cors";
 
 const app: Express = express();
 const port: number = 5000;
+
+// Call JBPM API to create the user in Business Central
+const jbpmClient = new JBPMSecurityManagementRESTAPI();
 
 // Create a new Pool instance with your PostgreSQL connection details
 const pool: Pool = new Pool({
@@ -22,9 +26,13 @@ app.use(cors({ origin: "*", methods: ["POST", "GET"] }));
 app.use(express.json());
 
 // Registration endpoint
-app.post("/register", async (req: Request, res: Response) => {
+app.post("/register", async (req, res) => {
   try {
     const { username, password, group } = req.body;
+    var role = "admin";
+    if (group == "applicant") {
+      role = "user";
+    }
 
     // Check if the username already exists in the database
     const existingUser = await pool.query(
@@ -38,7 +46,7 @@ app.post("/register", async (req: Request, res: Response) => {
     }
 
     // Hash and salt the password
-    const hashedPassword: string = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Store username and hashed password in the database
     await pool.query(
@@ -46,7 +54,26 @@ app.post("/register", async (req: Request, res: Response) => {
       [username, hashedPassword, group]
     );
 
-    res.status(200).json({ message: "Registration successful" });
+    // An object representing user data to be sent to the JBPM API
+    const jbpmUserData = { name: username };
+
+    // Make a request to the JBPM API to create the user
+    // Assign the user's groups and role
+    const jbpmResponse = await jbpmClient
+      .createUsers(jbpmUserData)
+      .then(() =>
+        jbpmClient.overrideUserGroups(username, [group, "kie-server"])
+      )
+      .then(() => jbpmClient.overrideUserRoles(username, [role]));
+
+    if (jbpmResponse.status === 200) {
+      res.status(200).json({ message: "Registration successful" });
+    } else {
+      // If there was an error creating the user in Business Central, you might want to roll back the database insertion.
+      // For simplicity, we'll keep it simple here.
+      console.error("Error creating user in JBPM:", jbpmResponse.data);
+      res.status(500).json({ error: "An error occurred during registration" });
+    }
   } catch (error) {
     console.error("Error during registration:", error);
     res.status(500).json({ error: "An error occurred during registration" });
@@ -83,6 +110,32 @@ app.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "An error occurred during login" });
+  }
+});
+
+app.get("/users/:username", async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    // Query to check if application table contains given username
+    // If contain, user has already applied
+    const query = "SELECT COUNT(*) FROM application WHERE username = $1";
+    const result = await pool.query(query, [username]);
+
+    const count = parseInt(result.rows[0].count);
+
+    var group: String = "admin";
+
+    // Make a request to the JBPM API to get the group of the user
+    await jbpmClient
+      .getUserGroups(username)
+      .then((response) => {
+        group = response.data[1].name;
+      })
+      .then(() => res.status(200).json({ exists: count > 0, group }));
+  } catch (error) {
+    console.error("Error during username check:", error);
+    res.status(500).json({ error: "An error occurred during username check" });
   }
 });
 

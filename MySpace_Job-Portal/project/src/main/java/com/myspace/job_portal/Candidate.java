@@ -8,29 +8,28 @@ public class Candidate implements java.io.Serializable {
 
 	static final long serialVersionUID = 1L;
 
-	@org.kie.api.definition.type.Label("Name")
-	private java.lang.String name;
-	@org.kie.api.definition.type.Label("E-mail")
+	@org.kie.api.definition.type.Label(value = "Date of Birth")
+	private java.time.LocalDate dob;
+	@org.kie.api.definition.type.Label(value = "E-mail")
 	private java.lang.String email;
-	@org.kie.api.definition.type.Label("Gender")
+	@org.kie.api.definition.type.Label(value = "Gender")
 	private java.lang.String gender;
-	@org.kie.api.definition.type.Label("Grade Point Average")
+	@org.kie.api.definition.type.Label(value = "Grade Point Average")
 	private float gpa;
-	@org.kie.api.definition.type.Label("University")
+	@org.kie.api.definition.type.Label(value = "Name")
+	private java.lang.String name;
+	@org.kie.api.definition.type.Label(value = "University")
 	private java.lang.String university;
-
-	@org.kie.api.definition.type.Label("Date of Birth")
-	private String dob;
 
 	public Candidate() {
 	}
 
-	public java.lang.String getName() {
-		return this.name;
+	public java.time.LocalDate getDob() {
+		return this.dob;
 	}
 
-	public void setName(java.lang.String name) {
-		this.name = name;
+	public void setDob(java.time.LocalDate dob) {
+		this.dob = dob;
 	}
 
 	public java.lang.String getEmail() {
@@ -57,6 +56,14 @@ public class Candidate implements java.io.Serializable {
 		this.gpa = gpa;
 	}
 
+	public java.lang.String getName() {
+		return this.name;
+	}
+
+	public void setName(java.lang.String name) {
+		this.name = name;
+	}
+
 	public java.lang.String getUniversity() {
 		return this.university;
 	}
@@ -65,30 +72,20 @@ public class Candidate implements java.io.Serializable {
 		this.university = university;
 	}
 
-	@Override
-	public String toString() {
-		return "Name: " + name + "\n" + "E-mail: " + email + "\n" + "Gender: "
-				+ gender + "\n" + "Grade Point Average: " + gpa + "\n"
-				+ "University: " + university + "\n" + "Date of Birth: " + dob;
-	}
-
-	public java.lang.String getDob() {
-		return this.dob;
-	}
-
-	public void setDob(java.lang.String dob) {
+	public Candidate(java.time.LocalDate dob, java.lang.String email,
+			java.lang.String gender, float gpa, java.lang.String name,
+			java.lang.String university) {
 		this.dob = dob;
-	}
-
-	public Candidate(java.lang.String name, java.lang.String email,
-			java.lang.String gender, float gpa, java.lang.String university,
-			java.lang.String dob) {
-		this.name = name;
 		this.email = email;
 		this.gender = gender;
 		this.gpa = gpa;
+		this.name = name;
 		this.university = university;
-		this.dob = dob;
+	}
+	
+	@Override
+	public String toString() {
+	    return this.name + " " + this.dob + " " + this.gender + " " + this.email + " " + this.gpa + " " + this.university;
 	}
 
 }

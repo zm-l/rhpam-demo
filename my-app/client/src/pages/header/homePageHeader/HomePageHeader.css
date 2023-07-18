@@ -1,0 +1,42 @@
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left-side {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-btn {
+  width: 20%;
+  margin-right: 10px;
+}
+
+.logo {
+  height: 100%;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.logo-words {
+  font-size: 66px;
+  color: bisque;
+}
+
+.heading {
+  position: relative;
+  padding-left: 30px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 66px;
+  color: #535252;
+}
+
+.right-side {
+  width: 15%;
+  margin-right: 0%;
+  display: flex;
+  align-items: center;
+}
