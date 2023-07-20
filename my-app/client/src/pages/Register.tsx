@@ -1,5 +1,6 @@
 import { Button, Form, Input, Select } from "antd";
 import React, { useState, useEffect } from "react";
+import LoginPageHeader from "./header/loginHeader/LoginPageHeader";
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -56,6 +57,7 @@ const Register: React.FC = () => {
 
   return (
     <>
+      <LoginPageHeader />
       <h1>Register</h1>
       <Form
         {...formItemLayout}

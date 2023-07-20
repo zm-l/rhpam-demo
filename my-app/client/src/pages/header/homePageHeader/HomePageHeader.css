@@ -15,15 +15,19 @@
   margin-right: 10px;
 }
 
-.logo {
-  height: 100%;
-  width: 100%;
-  margin-right: 10px;
+.logo-words {
+  display: inline-block;
+  /* Add any additional styling you want for the logo words here */
 }
 
-.logo-words {
-  font-size: 66px;
-  color: bisque;
+.logo-words h1 {
+  margin: 0;
+  font-size: xx-large;
+  color: cadetblue;
+}
+
+.logo-words a {
+  text-decoration: none; /* Remove the underline from the link */
 }
 
 .heading {

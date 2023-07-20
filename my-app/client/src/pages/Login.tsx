@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./css/Login.css";
+import LoginPageHeader from "./header/loginHeader/LoginPageHeader";
 
 export interface LoginProps {
   username: String;
@@ -79,6 +80,7 @@ const Login: React.FC<LoginProps> = (props) => {
 
   return (
     <>
+      <LoginPageHeader />
       <h1>Login</h1>
       <Form
         name="normal_login"

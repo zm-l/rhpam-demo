@@ -20,9 +20,9 @@ const HomePageHeader: React.FC<HomePageHeaderProps> = (props) => {
 
   return (
     <div className="header-container">
-      <div className="left-side">
-        <Link to="/" className="logo-btn">
-          <h1 className="logo-words">RHPAM Demo Job Portal</h1>
+      <div className="logo-words">
+        <Link to="/">
+          <h1>RHPAM Demo Job Portal</h1>
         </Link>
       </div>
       <div className="right-side">

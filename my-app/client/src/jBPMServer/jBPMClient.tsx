@@ -17,8 +17,8 @@ class jBPMClient {
   }
 
   public resetCredentials() {
-    this.username = "wbadmin";
-    this.password = "wbadmin";
+    this.username = "";
+    this.password = "";
   }
 
   private getHeaders(): Record<string, string> {
@@ -31,19 +31,16 @@ class jBPMClient {
 
   public startProcess(inputData: any): Promise<AxiosResponse> {
     const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${containerId}/processes/${processId}/instances`;
-    console.log(this.username, this.password);
-    console.log(axios.get(this.baseUrl, { headers }));
+    const url = `${this.baseUrl}/containers/${this.containerId}/processes/${this.processId}/instances`;
     return axios.post(url, inputData, { headers });
   }
 
-  public completeHumanTask(
-    containerId: string,
+  public completeTaskInstance(
     taskId: string,
     inputData: any
   ): Promise<AxiosResponse> {
     const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${containerId}/tasks/${taskId}/states/completed`;
+    const url = `${this.baseUrl}/containers/${this.containerId}/tasks/${taskId}/states/completed?auto-progress=true`;
     return axios.put(url, inputData, { headers });
   }
 
@@ -55,14 +52,14 @@ class jBPMClient {
 
   public getTaskInstance(taskInstanceId: Number): Promise<AxiosResponse> {
     const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${containerId}/tasks/${taskInstanceId}?withInputData=true&withOutputData=true&withAssignments=true`;
+    const url = `${this.baseUrl}/containers/${this.containerId}/tasks/${taskInstanceId}?withInputData=true&withOutputData=true&withAssignments=true`;
     return axios.get(url, { headers });
   }
 
   public claimTaskInstance(taskInstanceId: Number): Promise<AxiosResponse> {
     console.log(this.username, this.password);
     const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${containerId}/tasks/${taskInstanceId}/states/claimed`;
+    const url = `${this.baseUrl}/containers/${this.containerId}/tasks/${taskInstanceId}/states/claimed`;
     return axios.put(url, null, { headers });
   }
 
@@ -70,7 +67,7 @@ class jBPMClient {
     processInstanceId: Number
   ): Promise<AxiosResponse> => {
     const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${containerId}/processes/instances/${processInstanceId}`;
+    const url = `${this.baseUrl}/containers/${this.containerId}/processes/instances/${processInstanceId}`;
     return axios.get(url, { headers });
   };
 
@@ -78,7 +75,13 @@ class jBPMClient {
     processInstanceId: Number
   ): Promise<AxiosResponse> => {
     const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${containerId}/processes/instances/${processInstanceId}/nodes/instances`;
+    const url = `${this.baseUrl}/containers/${this.containerId}/processes/instances/${processInstanceId}/nodes/instances`;
+    return axios.get(url, { headers });
+  };
+
+  public getTaskOutput = async (taskName: String): Promise<AxiosResponse> => {
+    const headers = this.getHeaders();
+    const url = `${this.baseUrl}/containers/${this.containerId}/processes/definitions/${this.processId}/tasks/users/${taskName}/outputs`;
     return axios.get(url, { headers });
   };
   // Add more methods for interacting with jBPM API

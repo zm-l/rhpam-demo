@@ -1,9 +1,9 @@
 import { Button, DatePicker, Form, Input, Select } from "antd";
 import { RuleObject } from "antd/lib/form";
-import React, { useState } from "react";
-import jBPMService from "../jBPMServer/jBPMClient";
+import React from "react";
+import jBPMClient from "../jBPMServer/jBPMClient";
 import HomePageHeader from "./header/homePageHeader/HomePageHeader";
-import Application from "./interfaces/Application";
+import Candidate from "./interfaces/Candidate";
 import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
@@ -33,31 +33,28 @@ const tailFormItemLayout = {
 };
 
 interface Apply {
-  service: jBPMService;
+  username: String;
+  service: jBPMClient;
 }
 
 const Apply: React.FC<Apply> = (props) => {
-  const { service } = props;
+  const { username, service } = props;
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const onFinish = (values: any) => {
-    const applicantData: Application = {
-      candidate: {
-        "com.myspace.job_portal.Candidate": {
-          dob: values.dob,
-          email: values.email,
-          gender: values.gender,
-          gpa: values.gpa,
-          name: values.name,
-          university: values.university,
-        },
+    const candidateData: Candidate = {
+      "com.myspace.job_portal.Candidate": {
+        dob: values.dob,
+        email: values.email,
+        gender: values.gender,
+        gpa: values.gpa,
+        name: values.name,
+        university: values.university,
       },
-      email: values.email,
-      position: values.position,
     };
 
-    startProcess(applicantData);
+    startProcess(candidateData, values.position);
   };
 
   const validateGPA = (_: RuleObject, value: string) => {
@@ -67,14 +64,12 @@ const Apply: React.FC<Apply> = (props) => {
     return Promise.resolve();
   };
 
-  const startProcess = (application: Application) => {
-    // Example usage of jBPM service
-    const jsonString = JSON.stringify(application);
-    const username = service.getUsername();
+  const startProcess = (candidateData: Candidate, position: String) => {
+    const startProcessData = { candidate: candidateData, position: position };
+    const jsonString = JSON.stringify(startProcessData);
 
     service.startProcess(jsonString).then(async (r) => {
       const b = JSON.stringify({ username, task_id: r.data });
-      console.log(b);
       try {
         const response = await fetch("http://localhost:5000/applications", {
           method: "POST",
@@ -183,6 +178,7 @@ const Apply: React.FC<Apply> = (props) => {
             <Select.Option value="monash">
               Monash University Malaysia
             </Select.Option>
+            <Select.Option value="others">Others</Select.Option>
           </Select>
         </Form.Item>
 

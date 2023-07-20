@@ -64,7 +64,8 @@ app.post("/register", async (req, res) => {
       .then(() =>
         jbpmClient.overrideUserGroups(username, [group, "kie-server"])
       )
-      .then(() => jbpmClient.overrideUserRoles(username, [role]));
+      .then(() => jbpmClient.overrideUserRoles(username, [role]))
+      .then(() => jbpmClient.changeUserPassword(username, password));
 
     if (jbpmResponse.status === 200) {
       res.status(200).json({ message: "Registration successful" });
@@ -113,6 +114,23 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/applications", async (req, res) => {
+  try {
+    const { username, task_id } = req.body;
+
+    // Insert the username and task_id into the application table
+    const query = "INSERT INTO application (username, task_id) VALUES ($1, $2)";
+    await pool.query(query, [username, task_id]);
+
+    res.status(200).json({ message: "Application inserted successfully" });
+  } catch (error) {
+    console.error("Error during application insertion:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred during application insertion" });
+  }
+});
+
 app.get("/users/:username", async (req, res) => {
   try {
     const { username } = req.params;
@@ -136,6 +154,29 @@ app.get("/users/:username", async (req, res) => {
   } catch (error) {
     console.error("Error during username check:", error);
     res.status(500).json({ error: "An error occurred during username check" });
+  }
+});
+
+app.get("/applications/task", async (req, res) => {
+  try {
+    const username = req.query.username;
+
+    // Query the application table to retrieve the task_id based on the username
+    const query = "SELECT task_id FROM application WHERE username = $1";
+    const values = [username];
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      // No application found for the provided username
+      return res.status(404).json({ error: "Application not found" });
+    }
+
+    const taskId = result.rows[0].task_id;
+
+    return res.json({ taskId });
+  } catch (error) {
+    console.error("Error retrieving task ID:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
