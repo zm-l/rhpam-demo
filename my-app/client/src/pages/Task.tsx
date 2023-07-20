@@ -19,11 +19,19 @@ const Task: React.FC<TaskProps> = (props) => {
   const [isOutputModalOpen, setIsOutputModalOpen] = useState(false);
   const [taskOutputs, setTaskOutputs] = useState(null);
 
-  useEffect(() => {
-    service.getTaskList().then((response) => {
+  // Used to fetch the task list
+  const fetchTaskList = (
+    service: { getTaskList: () => Promise<any> },
+    setTaskList: (arg0: any) => void
+  ) => {
+    service.getTaskList().then((response: { data: { [x: string]: any } }) => {
       console.log(response.data);
       setTaskList(response.data["task-summary"]);
     });
+  };
+
+  useEffect(() => {
+    fetchTaskList(service, setTaskList);
   }, [service]);
 
   const getTaskInstanceDetails = async (taskId: Number) => {
@@ -82,6 +90,7 @@ const Task: React.FC<TaskProps> = (props) => {
         service.completeTaskInstance(taskID, values);
       }
     });
+    fetchTaskList(service, setTaskList);
     setIsOutputModalOpen(false);
   };
 
