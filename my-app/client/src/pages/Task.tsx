@@ -20,7 +20,7 @@ const Task: React.FC<TaskProps> = (props) => {
   const [taskOutputs, setTaskOutputs] = useState(null);
 
   // Used to fetch the task list
-  const fetchTaskList = (
+  const fetchTaskList = async (
     service: { getTaskList: () => Promise<any> },
     setTaskList: (arg0: any) => void
   ) => {
@@ -73,8 +73,10 @@ const Task: React.FC<TaskProps> = (props) => {
     setIsOutputModalOpen(true);
   };
 
-  const handleOutputOk = () => {
-    form.validateFields().then((values: any) => {
+  const handleOutputOk = async () => {
+    try {
+      const values = await form.validateFields();
+
       if (values.Interview) {
         // Convert the form data to the Interview interface
         const interviewData: Interview = {
@@ -85,13 +87,21 @@ const Task: React.FC<TaskProps> = (props) => {
         };
         values.Interview = interviewData;
       }
+
       console.log(values);
+
       if (taskID) {
-        service.completeTaskInstance(taskID, values);
+        await service.completeTaskInstance(taskID, values);
       }
-    });
-    fetchTaskList(service, setTaskList);
-    setIsOutputModalOpen(false);
+
+      // After completing the task instance, fetch the updated task list
+      await fetchTaskList(service, setTaskList);
+
+      setIsOutputModalOpen(false);
+    } catch (error) {
+      // Handle any errors that might occur during the process
+      console.error(error);
+    }
   };
 
   const handleOutputCancel = () => {
