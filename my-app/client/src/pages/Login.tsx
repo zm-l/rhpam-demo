@@ -7,14 +7,15 @@ import "./css/Login.css";
 import LoginPageHeader from "./header/loginHeader/LoginPageHeader";
 
 export interface LoginProps {
-  username: String;
-  password: String;
+  username: string;
+  password: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
+  login: (username: string, password: string) => void;
 }
 
 const Login: React.FC<LoginProps> = (props) => {
-  const { username, password, setUsername, setPassword } = props;
+  const { username, password, setUsername, setPassword, login } = props;
   const navigate = useNavigate();
 
   // Function to handle username check
@@ -47,9 +48,8 @@ const Login: React.FC<LoginProps> = (props) => {
         const response = await fetch(`http://localhost:5000/users/${username}`);
         const data = await response.json();
         const group = data.group;
-        console.log(group);
         const exists = data.exists;
-
+        login(username, password);
         if (group == "applicant") {
           navigateApplicant(exists);
         } else {

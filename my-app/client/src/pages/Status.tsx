@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import jBPMClient from "../jBPMServer/jBPMClient";
 import axios, { AxiosResponse } from "axios";
+import HomePageHeader from "./header/homePageHeader/HomePageHeader";
 
 // Define the interface representing the response data
 interface NodeInstanceData {
@@ -12,10 +13,11 @@ interface NodeInstanceData {
 
 interface StatusProps {
   service: jBPMClient;
+  logout: () => void;
 }
 
 const Status: React.FC<StatusProps> = (props) => {
-  const { service } = props;
+  const { service, logout } = props;
   const [taskId, setTaskId] = useState(null);
   const [nodeName, setNodeName] = useState("");
 
@@ -71,10 +73,13 @@ const Status: React.FC<StatusProps> = (props) => {
 
   // then return a java fragment to show the latest node-instance's node-name
   return (
-    <div>
-      <h1>Status</h1>
-      {nodeName && <p>The status is: {nodeName}</p>}
-    </div>
+    <>
+      <HomePageHeader logout={logout} />
+      <div>
+        <h1>Status</h1>
+        {nodeName && <p>The status is: {nodeName}</p>}
+      </div>
+    </>
   );
 };
 

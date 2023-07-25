@@ -35,10 +35,11 @@ const tailFormItemLayout = {
 interface Apply {
   username: String;
   service: jBPMClient;
+  logout: () => void;
 }
 
 const Apply: React.FC<Apply> = (props) => {
-  const { username, service } = props;
+  const { username, service, logout } = props;
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -97,7 +98,7 @@ const Apply: React.FC<Apply> = (props) => {
 
   return (
     <>
-      <HomePageHeader service={service} />
+      <HomePageHeader logout={logout} />
       <h1>Application Form</h1>
       <Form
         {...formItemLayout}
@@ -157,6 +158,7 @@ const Apply: React.FC<Apply> = (props) => {
         <Form.Item
           name="dob"
           label="Date of Birth"
+          tooltip="The date format is YYYY-MM-DD"
           rules={[
             {
               required: true,

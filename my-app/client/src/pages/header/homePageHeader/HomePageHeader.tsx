@@ -6,15 +6,15 @@ import jBPMService from "../../../jBPMServer/jBPMClient";
 import { useNavigate } from "react-router-dom";
 
 export interface HomePageHeaderProps {
-  service: jBPMService;
+  logout: () => void;
 }
 
 const HomePageHeader: React.FC<HomePageHeaderProps> = (props) => {
-  const { service } = props;
+  const { logout } = props;
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    service.resetCredentials();
+    logout();
     navigate("/");
   };
 

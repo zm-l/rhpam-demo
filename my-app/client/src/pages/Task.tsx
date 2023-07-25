@@ -6,10 +6,11 @@ import Interview from "./interfaces/Interview";
 
 export interface TaskProps {
   service: jBPMClient;
+  logout: () => void;
 }
 
 const Task: React.FC<TaskProps> = (props) => {
-  const { service } = props;
+  const { service, logout } = props;
   const [taskList, setTaskList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskID, setTaskID] = useState(null);
@@ -125,7 +126,7 @@ const Task: React.FC<TaskProps> = (props) => {
 
   return (
     <>
-      <HomePageHeader service={service} />
+      <HomePageHeader logout={logout} />
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
         {taskList.map((task) => (
           <>
