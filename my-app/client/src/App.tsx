@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Register from "./pages/Register";
 import Login, { LoginProps } from "./pages/Login";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import Task from "./pages/Task";
 import Apply from "./pages/Apply";
@@ -9,7 +9,7 @@ import Status from "./pages/Status";
 import jBPMClient from "./jBPMServer/jBPMClient";
 
 // Create a new AuthContext for managing authentication state
-const AuthContext = React.createContext<{
+export const AuthContext = React.createContext<{
   isLoggedIn: boolean;
   login: (username: string, password: string) => void;
   logout: () => void;
@@ -24,6 +24,7 @@ const App: React.FC = () => {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   let service: jBPMClient = new jBPMClient(username, password);
+  const navigate = useNavigate();
 
   // Function to handle login
   const login = (username: string, password: string) => {
@@ -44,6 +45,7 @@ const App: React.FC = () => {
     setUsername("");
     setPassword("");
     service.resetCredentials();
+    navigate("/");
   };
 
   const authContextValue = {
@@ -57,7 +59,6 @@ const App: React.FC = () => {
     password: password,
     setUsername: setUsername,
     setPassword: setPassword,
-    login: login,
   };
 
   return (
@@ -70,23 +71,14 @@ const App: React.FC = () => {
           {/* Protect private routes using the AuthContext */}
           {isLoggedIn ? (
             <>
-              <Route
-                path="/task"
-                element={<Task service={service} logout={logout} />}
-              ></Route>
+              <Route path="/task" element={<Task service={service} />}></Route>
               <Route
                 path="/apply"
-                element={
-                  <Apply
-                    username={username}
-                    service={service}
-                    logout={logout}
-                  />
-                }
+                element={<Apply username={username} service={service} />}
               ></Route>
               <Route
-                path="/result"
-                element={<Status service={service} logout={logout} />}
+                path="/status"
+                element={<Status service={service} />}
               ></Route>
             </>
           ) : null}

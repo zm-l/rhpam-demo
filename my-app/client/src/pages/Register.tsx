@@ -120,7 +120,7 @@ const Register: React.FC = () => {
         </Form.Item>
         <Form.Item
           name="group"
-          label="group"
+          label="Group"
           rules={[
             {
               required: true,

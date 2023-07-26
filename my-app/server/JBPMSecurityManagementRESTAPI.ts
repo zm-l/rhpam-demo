@@ -18,28 +18,11 @@ class JBPMSecurityManagementRESTAPI {
     };
   }
 
-  public getRoles(): Promise<AxiosResponse> {
-    return axios.get(`${this.baseUrl}/roles`, this.getHeaders());
-  }
-
-  async getUsers(): Promise<AxiosResponse> {
-    console.log(this.authHeader);
-    return axios.get(`${this.baseUrl}/users`, this.getHeaders());
-  }
-
-  async getGroups(): Promise<AxiosResponse> {
-    return axios.get(`${this.baseUrl}/groups`);
-  }
-
   async getUserGroups(userName: string): Promise<AxiosResponse> {
     return axios.get(
       `${this.baseUrl}/users/${userName}/groups`,
       this.getHeaders()
     );
-  }
-
-  async getUserRoles(userName: string): Promise<AxiosResponse> {
-    return axios.get(`${this.baseUrl}/users/${userName}/roles`);
   }
 
   async createUsers(userData: any): Promise<AxiosResponse> {
@@ -55,10 +38,6 @@ class JBPMSecurityManagementRESTAPI {
       { password: newPassword },
       this.getHeaders()
     );
-  }
-
-  async createGroups(groupData: any): Promise<AxiosResponse> {
-    return axios.post(`${this.baseUrl}/groups`, groupData);
   }
 
   async overrideUserGroups(
@@ -81,46 +60,6 @@ class JBPMSecurityManagementRESTAPI {
       roles,
       this.getHeaders()
     );
-  }
-
-  async updateGroupPermissions(
-    groupName: string,
-    permissions: any
-  ): Promise<AxiosResponse> {
-    return axios.post(
-      `${this.baseUrl}/groups/${groupName}/permissions`,
-      permissions
-    );
-  }
-
-  async updateRolePermissions(
-    roleName: string,
-    permissions: any
-  ): Promise<AxiosResponse> {
-    return axios.post(
-      `${this.baseUrl}/roles/${roleName}/permissions`,
-      permissions
-    );
-  }
-
-  async getGroupPermissions(groupName: string): Promise<AxiosResponse> {
-    return axios.get(`${this.baseUrl}/groups/${groupName}/permissions`);
-  }
-
-  async getRolePermissions(roleName: string): Promise<AxiosResponse> {
-    return axios.get(`${this.baseUrl}/roles/${roleName}/permissions`);
-  }
-
-  async getUserPermissions(userName: string): Promise<AxiosResponse> {
-    return axios.get(`${this.baseUrl}/users/${userName}/permissions`);
-  }
-
-  async deleteUser(userName: string): Promise<AxiosResponse> {
-    return axios.delete(`${this.baseUrl}/users/${userName}`);
-  }
-
-  async deleteGroup(groupName: string): Promise<AxiosResponse> {
-    return axios.delete(`${this.baseUrl}/groups/${groupName}`);
   }
 }
 

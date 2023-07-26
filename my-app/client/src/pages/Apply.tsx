@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { RuleObject } from "antd/lib/form";
 import React from "react";
 import jBPMClient from "../jBPMServer/jBPMClient";
@@ -35,11 +35,10 @@ const tailFormItemLayout = {
 interface Apply {
   username: String;
   service: jBPMClient;
-  logout: () => void;
 }
 
 const Apply: React.FC<Apply> = (props) => {
-  const { username, service, logout } = props;
+  const { username, service } = props;
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -84,7 +83,7 @@ const Apply: React.FC<Apply> = (props) => {
           const data = await response.json();
           console.log(data.message); // Output the response message
           // Perform any additional actions after successful insertion
-          navigate("/result");
+          navigate("/status");
         } else {
           console.error("Error:", response.statusText);
           // Handle the error case
@@ -98,7 +97,7 @@ const Apply: React.FC<Apply> = (props) => {
 
   return (
     <>
-      <HomePageHeader logout={logout} />
+      <HomePageHeader />
       <h1>Application Form</h1>
       <Form
         {...formItemLayout}

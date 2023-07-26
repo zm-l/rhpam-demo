@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./css/Login.css";
 import LoginPageHeader from "./header/loginHeader/LoginPageHeader";
+import { AuthContext } from "../App";
 
 export interface LoginProps {
   username: string;
   password: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
-  login: (username: string, password: string) => void;
 }
 
 const Login: React.FC<LoginProps> = (props) => {
-  const { username, password, setUsername, setPassword, login } = props;
+  const { username, password, setUsername, setPassword } = props;
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   // Function to handle username check
   const navigateApplicant = async (exists: Boolean) => {
     if (exists) {
       // Username exist, direct applicant to result page
-      navigate("/result");
+      navigate("/status");
       console.log("Username exists. Direct applicant to result page.");
       // ...
     } else {
@@ -49,7 +50,7 @@ const Login: React.FC<LoginProps> = (props) => {
         const data = await response.json();
         const group = data.group;
         const exists = data.exists;
-        login(username, password);
+        authContext.login(username, password);
         if (group == "applicant") {
           navigateApplicant(exists);
         } else {

@@ -1,21 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./HomePageHeader.css";
 import { Button } from "antd";
-import jBPMService from "../../../jBPMServer/jBPMClient";
-import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../App";
 
-export interface HomePageHeaderProps {
-  logout: () => void;
-}
-
-const HomePageHeader: React.FC<HomePageHeaderProps> = (props) => {
-  const { logout } = props;
-  const navigate = useNavigate();
+const HomePageHeader: React.FC = () => {
+  const authContext = useContext(AuthContext);
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    authContext.logout();
   };
 
   return (
