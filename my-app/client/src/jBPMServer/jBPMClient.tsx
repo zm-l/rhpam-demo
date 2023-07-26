@@ -12,10 +12,6 @@ class jBPMClient {
     this.password = password;
   }
 
-  public getUsername(): string {
-    return this.username;
-  }
-
   public resetCredentials() {
     this.username = "";
     this.password = "";
@@ -55,21 +51,6 @@ class jBPMClient {
     const url = `${this.baseUrl}/containers/${this.containerId}/tasks/${taskInstanceId}?withInputData=true&withOutputData=true&withAssignments=true`;
     return axios.get(url, { headers });
   }
-
-  public claimTaskInstance(taskInstanceId: Number): Promise<AxiosResponse> {
-    console.log(this.username, this.password);
-    const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${this.containerId}/tasks/${taskInstanceId}/states/claimed`;
-    return axios.put(url, null, { headers });
-  }
-
-  public getProcessInstance = async (
-    processInstanceId: Number
-  ): Promise<AxiosResponse> => {
-    const headers = this.getHeaders();
-    const url = `${this.baseUrl}/containers/${this.containerId}/processes/instances/${processInstanceId}`;
-    return axios.get(url, { headers });
-  };
 
   public getProcessNodeInstance = async (
     processInstanceId: Number
