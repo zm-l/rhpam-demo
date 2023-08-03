@@ -5,7 +5,7 @@ class JBPMSecurityManagementRESTAPI {
   private authHeader: string;
 
   constructor() {
-    this.baseUrl = "http://localhost/business-central/rest";
+    this.baseUrl = "http://localhost:81/business-central/rest";
     this.authHeader = `Basic ${btoa("wbadmin:wbadmin")}`;
   }
 

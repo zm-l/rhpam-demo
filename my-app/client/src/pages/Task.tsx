@@ -75,7 +75,7 @@ const Task: React.FC<TaskProps> = (props) => {
 
   const handleOutputOk = async () => {
     try {
-      const values = await form.validateFields();
+      var values = await form.validateFields();
 
       if (values.Interview) {
         // Convert the form data to the Interview interface
@@ -85,7 +85,7 @@ const Task: React.FC<TaskProps> = (props) => {
             interviewer: values.Interview.interviewer,
           },
         };
-        values.Interview = interviewData;
+        values = {interview: interviewData}
       }
 
       console.log(values);
