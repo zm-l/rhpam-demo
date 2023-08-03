@@ -1,4 +1,4 @@
-package com.myspace;
+package com.myspace.job_portal;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -168,19 +168,15 @@ const Task: React.FC<TaskProps> = (props) => {
           <Form form={form}>
             {Object.entries(taskOutputs).map(([outputName, outputType]) => (
               <React.Fragment key={outputName}>
-                <Form.Item
-                  label={outputName}
-                  name={outputName}
-                  rules={[{ required: true }]}
-                >
-                  <Input
-                    type={
-                      outputType === "com.myspace.job_portal.Interview"
-                        ? "hidden"
-                        : (outputType as string)
-                    }
-                  />
-                </Form.Item>
+                {outputType !== "com.myspace.job_portal.Interview" && (
+                  <Form.Item
+                    label={outputName}
+                    name={outputName}
+                    rules={[{ required: true }]}
+                  >
+                    <Input type={outputType as string} />
+                  </Form.Item>
+                )}
                 {outputType === "com.myspace.job_portal.Interview" && (
                   <>
                     <Form.Item
